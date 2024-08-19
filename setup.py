@@ -44,8 +44,8 @@ if __name__ == "__main__":
 
     install_requirements = [
         "gbd_mapping==4.0.0",
-        "vivarium==2.3.8",
-        "vivarium_public_health==2.3.3",
+        "vivarium==3.0.0",
+        "vivarium_public_health==3.0.0",
         "click",
         "jinja2",
         "loguru",

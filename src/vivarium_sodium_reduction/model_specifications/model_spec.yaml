@@ -3,37 +3,62 @@ components:
         population:
             - BasePopulation()
             - Mortality()
-        metrics:
-            - DisabilityObserver()
-            - MortalityObserver()
+        disease:
+            - SI('ischemic_heart_disease')
+            - SI('ischemic_stroke')
+#        metrics:
+#            - DisabilityObserver()
+#            - MortalityObserver()
+    vivarium_sodium_reduction.components:
+        - CorrelatedRisk('risk_factor.high_systolic_blood_pressure')
+        - CorrelatedRisk('risk_factor.diet_high_in_sodium')
+        - RiskCorrelation('risk_factor.high_systolic_blood_pressure', 'risk_factor.diet_high_in_sodium', '0.75')
+        - SodiumSBPEffect()
+    vivarium_public_health.risks:
+        - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+                                'cause.ischemic_heart_disease.incidence_rate')
+    #     - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+    #                             'cause.ischemic_stroke.incidence_rate')
+    vivarium_sodium_reduction.components:
+        - RelativeShiftIntervention('diet_high_in_sodium.exposure')
 
-    # Causes an error if left empty. Uncomment when you have components. 
-    # vivarium_sodium_reduction.components:
 
 configuration:
     input_data:
+        artifact_path: /home/j/Project/simulation_science/sodium_usa.hdf
         input_draw_number: 0
     interpolation:
         order: 0
-        extrapolate: False
+        extrapolate: True
     randomness:
         map_size: 1_000_000
         key_columns: ['entrance_time', 'age']
         random_seed: 0
     time:
         start:
-            year: 2005
-            month: 7
-            day: 2
+            year: 2025
+            month: 1
+            day: 1
         end:
-            year: 2010
-            month: 7
-            day: 2
-        step_size: 1 # Days
+            year: 2044
+            month: 12
+            day: 31
+        step_size: 168 # 28*6 (approximately 6 months, in days)
     population:
-        population_size: 100
-        age_start: 0
-        age_end: 100
+        population_size: 10_000
+        initialization_age_min: 25
+        initialization_age_max: 125
+    
+    relative_shift_intervention:
+        diet_high_in_sodium:
+            exposure:
+                - shift_factor: 1.0
+                - age_start: 0
+                - age_end: 125
+    
+    risk_factor:
+        high_systolic_blood_pressure:
+            - tmred: 1.0
 
     stratification:
         default:
