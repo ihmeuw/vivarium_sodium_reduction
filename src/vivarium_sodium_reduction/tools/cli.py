@@ -5,9 +5,11 @@ from loguru import logger
 from vivarium.framework.utilities import handle_exceptions
 
 from vivarium_sodium_reduction.constants import metadata, paths
-from vivarium_sodium_reduction.tools import (build_artifacts,
-                                                 build_results,
-                                                 configure_logging_to_terminal)
+from vivarium_sodium_reduction.tools import (
+    build_artifacts,
+    build_results,
+    configure_logging_to_terminal,
+)
 
 
 @click.command()
