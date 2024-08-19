@@ -12,6 +12,7 @@ for an example.
 
    No logging is done here. Logging is done in vivarium inputs itself and forwarded.
 """
+
 from typing import List, Optional, Union
 
 import pandas as pd

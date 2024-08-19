@@ -1,17 +1,19 @@
+from typing import Any, Dict
+
 import pandas as pd
-from typing import Dict, Any
 from vivarium import Component
 from vivarium.framework.engine import Builder
 from vivarium.framework.population import SimulantData
+
 
 class RelativeShiftIntervention(Component):
     """Applies a relative shift to a target value."""
 
     CONFIGURATION_DEFAULTS = {
-        'intervention': {
-            'shift_factor': 0.1,
-            'age_start': 0,
-            'age_end': 125,
+        "intervention": {
+            "shift_factor": 0.1,
+            "age_start": 0,
+            "age_end": 125,
         }
     }
 
@@ -25,9 +27,7 @@ class RelativeShiftIntervention(Component):
 
     @property
     def configuration_defaults(self) -> Dict[str, Dict[str, Any]]:
-        return {
-            f'{self.name}': self.CONFIGURATION_DEFAULTS['intervention']
-        }
+        return {f"{self.name}": self.CONFIGURATION_DEFAULTS["intervention"]}
 
     def setup(self, builder: Builder) -> None:
         self.config = builder.configuration[self.name]
@@ -35,12 +35,10 @@ class RelativeShiftIntervention(Component):
         self.age_start = self.config.age_start
         self.age_end = self.config.age_end
 
-        self.population_view = builder.population.get_view(['age'])
+        self.population_view = builder.population.get_view(["age"])
 
         builder.value.register_value_modifier(
-            self.target,
-            modifier=self.adjust_exposure,
-            requires_columns=['age']
+            self.target, modifier=self.adjust_exposure, requires_columns=["age"]
         )
 
     def adjust_exposure(self, index: pd.Index, exposure: pd.Series) -> pd.Series:
