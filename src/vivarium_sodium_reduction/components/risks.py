@@ -3,6 +3,7 @@ from typing import Dict, List, Optional
 import numpy as np
 import pandas as pd
 import scipy
+from gbd_mapping import risk_factors
 from vivarium import Component
 from vivarium.framework.engine import Builder
 from vivarium.framework.event import Event
@@ -57,6 +58,10 @@ class DropValueRisk(Risk):
         return post_processor
 
 class CorrelatedRisk(DropValueRisk):
+    """A risk that can be correlated with another risk.
+    
+    TODO: document strategy used in this component in more detail,
+    Abie had an AI adapt it from https://github.com/ihmeuw/vivarium_nih_us_cvd"""
     @property
     def columns_created(self) -> List[str]:
         return []
@@ -80,6 +85,7 @@ class CorrelatedRisk(DropValueRisk):
         pass
 
 class RiskCorrelation(Component):
+    """A component that generates a specified correlation between two risk exposures."""
     @property
     def columns_created(self) -> List[str]:
         return self.propensity_column_names + self.exposure_column_names
@@ -90,7 +96,7 @@ class RiskCorrelation(Component):
 
     @property
     def initialization_requirements(self) -> Dict[str, List[str]]:
-        return {"requires_columns": ["age"]}
+        return {"requires_columns": ["age"] + self.ensemble_propensities}
 
     def __init__(self, risk1: str, risk2: str, correlation: str):
         super().__init__()
@@ -100,6 +106,11 @@ class RiskCorrelation(Component):
         self.correlation_matrix = correlation_matrix
         self.propensity_column_names = [f"{risk.name}_propensity" for risk in self.correlated_risks]
         self.exposure_column_names = [f"{risk.name}_exposure" for risk in self.correlated_risks]
+        self.ensemble_propensities = [
+            f"ensemble_propensity_" + risk
+            for risk in self.correlated_risks
+            if risk_factors[risk.name].distribution == "ensemble"
+        ]
 
     def setup(self, builder: Builder) -> None:
         self.distributions = {risk: builder.components.get_component(risk).exposure_distribution for risk in self.correlated_risks}
