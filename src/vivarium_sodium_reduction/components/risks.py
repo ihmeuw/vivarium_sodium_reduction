@@ -188,12 +188,10 @@ class SodiumSBPEffect(Component):
         sodium_exposure = self.sodium_exposure(index)
         sodium_exposure_raw = self.sodium_exposure_raw(index)
 
-        sodium_threshold = 2.0  # g/day
-        mmHg_per_g_sodium = 10  # mmHg increase per 1g sodium above threshold
+        mmHg_per_g_sodium = 5.8/6.0  # 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease
 
         sbp_increase = pd.Series(0, index=index)
         sodium_drop = sodium_exposure_raw - sodium_exposure
-        # TODO: use threshold
 
         sbp_drop_due_to_sodium_drop = sodium_drop * mmHg_per_g_sodium
 
