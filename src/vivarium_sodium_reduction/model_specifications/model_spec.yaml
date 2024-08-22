@@ -9,16 +9,17 @@ components:
             - SI('ischemic_stroke')
             - SI('intracerebral_hemorrhage')
             - SI('subarachnoid_hemorrhage')
-            - SI('chronic_kidney_disease')
             - SI('stomach_cancer')
-            #- SI('hypertensive_heart_disease')  # need a PAF-of-1 model, this does not have incidence
-        # results:  # need age_group for stratification
+            # - SI('chronic_kidney_disease') # no rr for SBP->CKD or any CKD subtype; TODO: must be a PAF-of-1 this for CKD due to HTN
+            #- SI('hypertensive_heart_disease')  # TODO: a PAF-of-1 model, this does not have incidence
+        # results:  # TODO: need age_group for stratification, 
         #    - DisabilityObserver()
         #    - DiseaseObserver('ischemic_heart_disease')
         #    - DiseaseObserver('ischemic_stroke')
         #    - DiseaseObserver('intracerebral_hemorrhage')
         #    - MortalityObserver()
         #    # TODO: how do I observe the risk factors?
+        # TODO: figure out how to run psimulate
     vivarium_sodium_reduction.components.risks:
         - CorrelatedRisk('risk_factor.high_systolic_blood_pressure')
         - CorrelatedRisk('risk_factor.diet_high_in_sodium')
@@ -29,8 +30,7 @@ components:
         - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.ischemic_stroke.incidence_rate')
         - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.intracerebral_hemorrhage.incidence_rate')
         - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.subarachnoid_hemorrhage.incidence_rate')
-        # - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.chronic_kidney_disease.incidence_rate')
-        # - NonLogLinearRiskEffect('risk_factor.diet_high_in_sodium', 'cause.stomach_cancer.incidence_rate')
+        - NonLogLinearRiskEffect('risk_factor.diet_high_in_sodium', 'cause.stomach_cancer.incidence_rate')
     vivarium_sodium_reduction.components.interventions:
         - RelativeShiftIntervention('diet_high_in_sodium.exposure')
 
@@ -68,12 +68,6 @@ configuration:
                 - age_start: 0
                 - age_end: 125
     
-    risk_factor:
-        high_systolic_blood_pressure:
-            - tmred: 120.0
-        # diet_high_in_sodium:
-        #     - tmred: 1.0
-
     stratification:
         default:
             - 'age_group'
