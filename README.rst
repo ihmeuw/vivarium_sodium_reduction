@@ -122,3 +122,13 @@ The ``-v`` flag will log verbosely, so you will get log messages every time
 step. For more ways to run simulations, see the tutorials at
 https://vivarium.readthedocs.io/en/latest/tutorials/running_a_simulation/index.html
 and https://vivarium.readthedocs.io/en/latest/tutorials/exploration.html
+
+To run multiple simulations in parallel, you can use the `psimulate` command, which you can install with::
+
+   (vivarium_sodium_reduction) :~$ pip install vivarium_cluster_tools
+   (vivarium_sodium_reduction) :~$ conda install redis
+
+Then you can run simulations in parallel on IHME's cluster::
+
+   (vivarium_sodium_reduction) :~$ 
+   psimulate run -o /mnt/share/homes/abie/vivarium_results/sodium_usa/ -P proj_simscience src/vivarium_sodium_reduction/model_specifications/model_spec.yaml src/vivarium_sodium_reduction/model_specifications/branches/scenarios.yaml
