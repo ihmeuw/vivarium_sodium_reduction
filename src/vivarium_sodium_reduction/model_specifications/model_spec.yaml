@@ -12,12 +12,13 @@ components:
             - SI('stomach_cancer')
             # - SI('chronic_kidney_disease') # no rr for SBP->CKD or any CKD subtype; TODO: must be a PAF-of-1 this for CKD due to HTN
             #- SI('hypertensive_heart_disease')  # TODO: a PAF-of-1 model, this does not have incidence
-        # results:  # TODO: need age_group for stratification, 
-        #    - DisabilityObserver()
-        #    - DiseaseObserver('ischemic_heart_disease')
-        #    - DiseaseObserver('ischemic_stroke')
-        #    - DiseaseObserver('intracerebral_hemorrhage')
-        #    - MortalityObserver()
+        results:
+            - ResultsStratifier()
+            - DisabilityObserver()
+            - DiseaseObserver('ischemic_heart_disease')
+            - DiseaseObserver('ischemic_stroke')
+            - DiseaseObserver('intracerebral_hemorrhage')
+            - MortalityObserver()
         #    # TODO: how do I observe the risk factors?
         # TODO: figure out how to run psimulate
     vivarium_sodium_reduction.components.risks:
