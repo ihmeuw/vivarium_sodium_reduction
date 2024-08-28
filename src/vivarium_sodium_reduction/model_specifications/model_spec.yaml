@@ -6,21 +6,22 @@ components:
         disease:
             - SI('ischemic_heart_disease')
             - SI('ischemic_stroke')
+        risks:
+            - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+                                     'cause.ischemic_heart_disease.incidence_rate')
+            - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+                                     'cause.ischemic_stroke.incidence_rate')
 #        metrics:
 #            - DisabilityObserver()
 #            - MortalityObserver()
-    vivarium_sodium_reduction.components.risks:
-        - CorrelatedRisk('risk_factor.high_systolic_blood_pressure')
-        - CorrelatedRisk('risk_factor.diet_high_in_sodium')
-        - RiskCorrelation('risk_factor.high_systolic_blood_pressure', 'risk_factor.diet_high_in_sodium', '0.75')
-        - SodiumSBPEffect()
-    vivarium_public_health.risks:
-        - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
-                                'cause.ischemic_heart_disease.incidence_rate')
-        - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
-                                'cause.ischemic_stroke.incidence_rate')
-    vivarium_sodium_reduction.components.interventions:
-        - RelativeShiftIntervention('diet_high_in_sodium.exposure')
+    vivarium_sodium_reduction.components:
+        risks:
+            - CorrelatedRisk('risk_factor.high_systolic_blood_pressure')
+            - CorrelatedRisk('risk_factor.diet_high_in_sodium')
+            - RiskCorrelation('risk_factor.high_systolic_blood_pressure', 'risk_factor.diet_high_in_sodium', '0.75')
+            - SodiumSBPEffect()
+        interventions:
+            - RelativeShiftIntervention('diet_high_in_sodium.exposure')
 
 
 configuration:
