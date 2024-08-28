@@ -21,19 +21,25 @@ components:
             - MortalityObserver()
         #    # TODO: how do I observe the risk factors?
         # TODO: figure out how to run psimulate
-    vivarium_sodium_reduction.components.risks:
-        - CorrelatedRisk('risk_factor.high_systolic_blood_pressure')
-        - CorrelatedRisk('risk_factor.diet_high_in_sodium')
-        - RiskCorrelation('risk_factor.high_systolic_blood_pressure', 'risk_factor.diet_high_in_sodium', '0.75')
-        - SodiumSBPEffect()
-    vivarium_public_health.risks:
-        - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.ischemic_heart_disease.incidence_rate')
-        - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.ischemic_stroke.incidence_rate')
-        - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.intracerebral_hemorrhage.incidence_rate')
-        - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.subarachnoid_hemorrhage.incidence_rate')
-        - NonLogLinearRiskEffect('risk_factor.diet_high_in_sodium', 'cause.stomach_cancer.incidence_rate')
-    vivarium_sodium_reduction.components.interventions:
-        - RelativeShiftIntervention('diet_high_in_sodium.exposure')
+        risks:
+            - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+                                     'cause.ischemic_heart_disease.incidence_rate')
+            - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+                                     'cause.ischemic_stroke.incidence_rate')
+            - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+                                     'cause.intracerebral_hemorrhage.incidence_rate')
+            - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+                                     'cause.subarachnoid_hemorrhage.incidence_rate')
+            - NonLogLinearRiskEffect('risk_factor.diet_high_in_sodium',
+                                     'cause.stomach_cancer.incidence_rate')
+    vivarium_sodium_reduction.components:
+        risks:
+            - CorrelatedRisk('risk_factor.high_systolic_blood_pressure')
+            - CorrelatedRisk('risk_factor.diet_high_in_sodium')
+            - RiskCorrelation('risk_factor.high_systolic_blood_pressure', 'risk_factor.diet_high_in_sodium', '0.75')
+            - SodiumSBPEffect()
+        interventions:
+            - RelativeShiftIntervention('diet_high_in_sodium.exposure')
 
 
 configuration:
