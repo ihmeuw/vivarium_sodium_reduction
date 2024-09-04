@@ -17,9 +17,11 @@ class RelativeShiftIntervention(Component):
         }
     }
 
+
     def __init__(self, target: str):
         super().__init__()
         self.target = target
+        self.entity, self.measure = self.target.split('.')
 
     @property
     def name(self) -> str:
@@ -27,11 +29,12 @@ class RelativeShiftIntervention(Component):
 
     @property
     def configuration_defaults(self) -> Dict[str, Dict[str, Any]]:
-        return {f"{self.name}": self.CONFIGURATION_DEFAULTS["intervention"]}
+        return {'relative_shift_intervention': {self.entity: {self.measure: self.CONFIGURATION_DEFAULTS["intervention"]}}}
 
     def setup(self, builder: Builder) -> None:
         self.config = builder.configuration[self.name]
         self.shift_factor = self.config.shift_factor
+        breakpoint()
         self.age_start = self.config.age_start
         self.age_end = self.config.age_end
 

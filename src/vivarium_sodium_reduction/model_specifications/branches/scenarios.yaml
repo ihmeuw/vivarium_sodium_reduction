@@ -1,6 +1,7 @@
-input_draw_count: 10
-random_seed_count: 10
+input_draw_count: 1
+random_seed_count: 2
 
 branches:
-  - relative_shift_intervention.diet_high_in_sodium.exposure:
-      shift_factor: [1.0, 0.95, 0.90, 0.85]
+    - risk_effect.relative_shift_intervention_on_risk_factor.diet_high_in_sodium.exposure:
+          data_sources:
+              relative_risk: [0.95, 0.9]

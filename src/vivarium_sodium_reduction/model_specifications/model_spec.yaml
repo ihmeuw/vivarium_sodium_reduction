@@ -12,6 +12,9 @@ components:
             - SI('stomach_cancer')
             # - SI('chronic_kidney_disease') # no rr for SBP->CKD or any CKD subtype; TODO: must be a PAF-of-1 this for CKD due to HTN
             #- SI('hypertensive_heart_disease')  # TODO: a PAF-of-1 model, this does not have incidence
+        risks:
+            - Risk("risk_factor.relative_shift_intervention")
+            - RiskEffect("risk_factor.relative_shift_intervention", "risk_factor.diet_high_in_sodium.exposure")
         results:
             - ResultsStratifier()
             - DisabilityObserver()
@@ -32,13 +35,13 @@ components:
         - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.intracerebral_hemorrhage.incidence_rate')
         - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.subarachnoid_hemorrhage.incidence_rate')
         - NonLogLinearRiskEffect('risk_factor.diet_high_in_sodium', 'cause.stomach_cancer.incidence_rate')
-    vivarium_sodium_reduction.components.interventions:
-        - RelativeShiftIntervention('diet_high_in_sodium.exposure')
+#    vivarium_sodium_reduction.components.interventions:
+#        - RelativeShiftIntervention('diet_high_in_sodium.exposure')
 
 
 configuration:
     input_data:
-        artifact_path: /home/j/Project/simulation_science/sodium_usa.hdf
+        artifact_path: /ihme/homes/hjafari/sodium_artifact/sodium_usa.hdf
         input_draw_number: 0
     interpolation:
         order: 0
@@ -53,22 +56,31 @@ configuration:
             month: 1
             day: 1
         end:
-            year: 2044
-            month: 12
-            day: 31
+            year: 2026
+            month: 1
+            day: 1
         step_size: 168 # 28*6 (approximately 6 months, in days)
     population:
         population_size: 1_000
         initialization_age_min: 0
         initialization_age_max: 125
     
-    relative_shift_intervention:
-        diet_high_in_sodium:
-            exposure:
-                - shift_factor: 1.0
-                - age_start: 0
-                - age_end: 125
-    
+    #relative_shift_intervention:
+    #    diet_high_in_sodium:
+    #        exposure:
+    #            shift_factor: 0.5
+    #            age_start: 0
+    #            age_end: 125
+
+    risk_factor.relative_shift_intervention:
+       distribution_type: 'dichotomous'
+       data_sources:
+           exposure: 1.0
+    risk_effect.relative_shift_intervention_on_risk_factor.diet_high_in_sodium.exposure:
+        data_sources:
+            relative_risk: 0.95
+            population_attributable_fraction: 0.0
+        
     stratification:
         default:
             - 'age_group'
