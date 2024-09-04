@@ -41,15 +41,15 @@ components:
 
 configuration:
     input_data:
-        artifact_path: /home/j/Project/simulation_science/sodium_usa.hdf
-        input_draw_number: 0
+        artifact_path: /mnt/share/homes/abie/projects/2024/sodium_usa.hdf
+        input_draw_number: 258
     interpolation:
         order: 0
         extrapolate: True
     randomness:
         map_size: 1_000_000
         key_columns: ['entrance_time', 'age']
-        random_seed: 0
+        random_seed: 4344
     time:
         start:
             year: 2025
@@ -66,7 +66,7 @@ configuration:
         initialization_age_max: 125
     
     relative_shift_intervention_on_diet_high_in_sodium:
-        shift_factor: 1.0
+        shift_factor: 0.85
         age_start: 0
         age_end: 125
 
