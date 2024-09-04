@@ -10,7 +10,7 @@ components:
             - SI('intracerebral_hemorrhage')
             - SI('subarachnoid_hemorrhage')
             - SI('stomach_cancer')
-            # - SI('chronic_kidney_disease') # no rr for SBP->CKD or any CKD subtype; TODO: must be a PAF-of-1 this for CKD due to HTN
+            - SI('chronic_kidney_disease_due_to_hypertension') # no rr for SBP->CKD or any CKD subtype; TODO: must be a PAF-of-1 this for CKD due to HTN
             #- SI('hypertensive_heart_disease')  # TODO: a PAF-of-1 model, this does not have incidence
         results:
             - ResultsStratifier()
@@ -22,6 +22,7 @@ components:
         #    # TODO: how do I observe the risk factors?
         # TODO: figure out how to run psimulate
         risks:
+        # - RiskEffect('risk_factor.high_systolic_blood_pressure', 'cause.chronic_kidney_disease_due_to_hypertension.incidence_rate')
             - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
                                      'cause.ischemic_heart_disease.incidence_rate')
             - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
@@ -35,12 +36,12 @@ components:
     vivarium_sodium_reduction.components:
         risks:
             - CorrelatedRisk('risk_factor.high_systolic_blood_pressure')
+            # - ThresholdRisk('risk_factor.high_systolic_blood_pressure', '140')
             - CorrelatedRisk('risk_factor.diet_high_in_sodium')
             - RiskCorrelation('risk_factor.high_systolic_blood_pressure', 'risk_factor.diet_high_in_sodium', '0.75')
             - SodiumSBPEffect()
         interventions:
-            - RelativeShiftIntervention('diet_high_in_sodium.exposure')
-
+            - RelativeShiftIntervention('diet_high_in_sodium')
 
 configuration:
     input_data:
@@ -59,7 +60,7 @@ configuration:
             month: 1
             day: 1
         end:
-            year: 2044
+            year: 2026 # 2044
             month: 12
             day: 31
         step_size: 168 # 28*6 (approximately 6 months, in days)
@@ -68,13 +69,17 @@ configuration:
         initialization_age_min: 0
         initialization_age_max: 125
     
-    relative_shift_intervention:
-        diet_high_in_sodium:
-            exposure:
-                - shift_factor: 1.0
-                - age_start: 0
-                - age_end: 125
-    
+    relative_shift_intervention_on_diet_high_in_sodium:
+        shift_factor: 1.0
+        age_start: 0
+        age_end: 125
+
+    risk_effect.high_systolic_blood_pressure_on_chronic_kidney_disease_due_to_hypertension:
+        # exposure_parameters: 2
+        incidence_rate:
+            mean: 10
+            se: 3
+
     stratification:
         default:
             - 'age_group'

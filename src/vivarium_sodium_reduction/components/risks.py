@@ -90,6 +90,28 @@ class CorrelatedRisk(DropValueRisk):
         pass
 
 
+class ThresholdRisk(Component):
+    """A component that generates a risk based on a threshold of another risk."""
+
+    def __init__(self, risk: str, threshold: str):
+        super().__init__()
+        self.risk = EntityString(risk)
+        self.threshold = float(threshold)
+        self.exposure_pipeline_name = f"{self.risk.name}.threshold_exposure"
+
+    def setup(self, builder: Builder) -> None:
+        self.continuous_exposure = builder.value.get_value(self.risk.exposure_pipeline_name)
+        self.threshold_exposure = builder.value.register_value_producer(
+            self.exposure_pipeline_name,
+            source=self.continuous_exposure
+        )
+
+    def get_exposure_threshold_value(self, value):
+
+        return np.where(value <= self.threshold, 'cat1', 'cat2')
+
+
+
 class RiskCorrelation(Component):
     """A component that generates a specified correlation between two risk exposures."""
 

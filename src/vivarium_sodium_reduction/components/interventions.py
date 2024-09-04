@@ -10,11 +10,9 @@ class RelativeShiftIntervention(Component):
     """Applies a relative shift to a target value."""
 
     CONFIGURATION_DEFAULTS = {
-        "intervention": {
-            "shift_factor": 0.1,
-            "age_start": 0,
-            "age_end": 125,
-        }
+        "shift_factor": 0.1,
+        "age_start": 0,
+        "age_end": 125,
     }
 
     def __init__(self, target: str):
@@ -23,15 +21,16 @@ class RelativeShiftIntervention(Component):
 
     @property
     def name(self) -> str:
-        return f"relative_shift_intervention.{self.target}"
+        return f"relative_shift_intervention_on_{self.target}"
 
     @property
     def configuration_defaults(self) -> Dict[str, Dict[str, Any]]:
-        return {f"{self.name}": self.CONFIGURATION_DEFAULTS["intervention"]}
+        return {f"{self.name}": self.CONFIGURATION_DEFAULTS}
 
     def setup(self, builder: Builder) -> None:
         self.config = builder.configuration[self.name]
         self.shift_factor = self.config.shift_factor
+
         self.age_start = self.config.age_start
         self.age_end = self.config.age_end
 
