@@ -210,6 +210,7 @@ class SodiumSBPEffect(Component):
         sodium_exposure = self.sodium_exposure(index)
         sodium_exposure_raw = self.sodium_exposure_raw(index)
 
+        # FIXME: this should go in the constants.py file
         mmHg_per_g_sodium = 5.8/6.0  # 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease
 
         sbp_increase = pd.Series(0, index=index)
