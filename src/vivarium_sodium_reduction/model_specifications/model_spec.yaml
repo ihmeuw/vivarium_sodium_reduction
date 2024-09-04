@@ -3,26 +3,41 @@ components:
         population:
             - BasePopulation()
             - Mortality()
+            - FertilityCrudeBirthRate()
         disease:
             - SI('ischemic_heart_disease')
             - SI('ischemic_stroke')
+            - SI('intracerebral_hemorrhage')
+            - SI('subarachnoid_hemorrhage')
+            - SI('stomach_cancer')
+        results:
+            - ResultsStratifier()
+            - DisabilityObserver()
+            - DiseaseObserver('ischemic_heart_disease')
+            - DiseaseObserver('ischemic_stroke')
+            - DiseaseObserver('intracerebral_hemorrhage')
+            - DiseaseObserver('subarachnoid_hemorrhage')
+            - DiseaseObserver('stomach_cancer')
+            - MortalityObserver()
         risks:
             - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
                                      'cause.ischemic_heart_disease.incidence_rate')
             - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
                                      'cause.ischemic_stroke.incidence_rate')
-#        metrics:
-#            - DisabilityObserver()
-#            - MortalityObserver()
+            - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+                                     'cause.intracerebral_hemorrhage.incidence_rate')
+            - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
+                                     'cause.subarachnoid_hemorrhage.incidence_rate')
+            - NonLogLinearRiskEffect('risk_factor.diet_high_in_sodium',
+                                     'cause.stomach_cancer.incidence_rate')
     vivarium_sodium_reduction.components:
         risks:
             - CorrelatedRisk('risk_factor.high_systolic_blood_pressure')
             - CorrelatedRisk('risk_factor.diet_high_in_sodium')
-            - RiskCorrelation('risk_factor.high_systolic_blood_pressure', 'risk_factor.diet_high_in_sodium', '0.75')
+            - RiskCorrelation('risk_factor.high_systolic_blood_pressure', 'risk_factor.diet_high_in_sodium', '0.0')
             - SodiumSBPEffect()
         interventions:
-            - RelativeShiftIntervention('diet_high_in_sodium.exposure')
-
+            - RelativeShiftIntervention('diet_high_in_sodium')
 
 configuration:
     input_data:
@@ -46,29 +61,17 @@ configuration:
             day: 31
         step_size: 168 # 28*6 (approximately 6 months, in days)
     population:
-        population_size: 10_000
-        initialization_age_min: 25
+        population_size: 1_000
+        initialization_age_min: 0
         initialization_age_max: 125
     
-    relative_shift_intervention:
-        diet_high_in_sodium:
-            exposure:
-                - shift_factor: 1.0
-                - age_start: 0
-                - age_end: 125
-    
-    risk_factor:
-        high_systolic_blood_pressure:
-            - tmred: 1.0
+    relative_shift_intervention_on_diet_high_in_sodium:
+        shift_factor: 1.0
+        age_start: 0
+        age_end: 125
 
     stratification:
         default:
             - 'age_group'
             - 'sex'
             - 'current_year'
-        # disability:
-        #     include:
-        #     exclude:
-        # mortality:
-        #     include:
-        #     exclude:

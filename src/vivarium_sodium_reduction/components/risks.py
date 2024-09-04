@@ -90,6 +90,28 @@ class CorrelatedRisk(DropValueRisk):
         pass
 
 
+class ThresholdRisk(Component):
+    """A component that generates a risk based on a threshold of another risk."""
+
+    def __init__(self, risk: str, threshold: str):
+        super().__init__()
+        self.risk = EntityString(risk)
+        self.threshold = float(threshold)
+        self.exposure_pipeline_name = f"{self.risk.name}.threshold_exposure"
+
+    def setup(self, builder: Builder) -> None:
+        self.continuous_exposure = builder.value.get_value(self.risk.exposure_pipeline_name)
+        self.threshold_exposure = builder.value.register_value_producer(
+            self.exposure_pipeline_name,
+            source=self.continuous_exposure
+        )
+
+    def get_exposure_threshold_value(self, value):
+
+        return np.where(value <= self.threshold, 'cat1', 'cat2')
+
+
+
 class RiskCorrelation(Component):
     """A component that generates a specified correlation between two risk exposures."""
 
@@ -188,12 +210,11 @@ class SodiumSBPEffect(Component):
         sodium_exposure = self.sodium_exposure(index)
         sodium_exposure_raw = self.sodium_exposure_raw(index)
 
-        sodium_threshold = 2.0  # g/day
-        mmHg_per_g_sodium = 10  # mmHg increase per 1g sodium above threshold
+        # FIXME: this should go in the constants.py file
+        mmHg_per_g_sodium = 5.8/6.0  # 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease
 
         sbp_increase = pd.Series(0, index=index)
         sodium_drop = sodium_exposure_raw - sodium_exposure
-        # TODO: use threshold
 
         sbp_drop_due_to_sodium_drop = sodium_drop * mmHg_per_g_sodium
 
