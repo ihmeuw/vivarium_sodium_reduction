@@ -61,9 +61,9 @@ configuration:
             day: 31
         step_size: 168 # 28*6 (approximately 6 months, in days)
     population:
-        population_size: 1_000
+        population_size: 100_000
         initialization_age_min: 0
-        initialization_age_max: 125
+        initialization_age_max: 100
     
     relative_shift_intervention_on_diet_high_in_sodium:
         shift_factor: 0.85
