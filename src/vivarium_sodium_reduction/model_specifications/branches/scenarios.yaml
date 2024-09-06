@@ -1,5 +1,5 @@
-input_draw_count: 5
-random_seed_count: 30
+input_draw_count: 1
+random_seed_count: 1
 
 branches:
     - relative_shift_intervention_on_diet_high_in_sodium:

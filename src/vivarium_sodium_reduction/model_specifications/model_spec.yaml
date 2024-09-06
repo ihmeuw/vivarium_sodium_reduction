@@ -32,9 +32,8 @@ components:
                                      'cause.stomach_cancer.incidence_rate')
     vivarium_sodium_reduction.components:
         risks:
-            - CorrelatedRisk('risk_factor.high_systolic_blood_pressure')
-            - CorrelatedRisk('risk_factor.diet_high_in_sodium')
-            - RiskCorrelation('risk_factor.high_systolic_blood_pressure', 'risk_factor.diet_high_in_sodium', '0.0')
+            - DropValueRisk('risk_factor.high_systolic_blood_pressure')
+            - DropValueRisk('risk_factor.diet_high_in_sodium')
             - SodiumSBPEffect()
         interventions:
             - RelativeShiftIntervention('diet_high_in_sodium')
@@ -61,12 +60,12 @@ configuration:
             day: 31
         step_size: 168 # 28*6 (approximately 6 months, in days)
     population:
-        population_size: 100_000
+        population_size: 10_000
         initialization_age_min: 0
         initialization_age_max: 100
     
     relative_shift_intervention_on_diet_high_in_sodium:
-        shift_factor: 0.85
+        shift_factor: 2.0
         age_start: 0
         age_end: 125
 

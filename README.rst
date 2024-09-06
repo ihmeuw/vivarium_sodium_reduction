@@ -21,27 +21,7 @@ your operating system at the following places:
 Once you have all three installed, you should open up your normal shell
 (if you're on linux or OSX) or the ``git bash`` shell if you're on windows.
 You'll then make an environment, clone this repository, then install
-all necessary requirements as follows::
-
-  :~$ conda create --name=vivarium_sodium_reduction python=3.11
-  ...conda will download python and base dependencies...
-  :~$ conda activate vivarium_sodium_reduction
-  (vivarium_sodium_reduction) :~$ git clone https://github.com/ihmeuw/vivarium_sodium_reduction.git
-  ...git will copy the repository from github and place it in your current directory...
-  (vivarium_sodium_reduction) :~$ cd vivarium_sodium_reduction
-  (vivarium_sodium_reduction) :~$ pip install -e .
-  ...pip will install vivarium and other requirements...
-
-Supported Python versions: 3.9, 3.10, 3.11
-
-Note the ``-e`` flag that follows pip install. This will install the python
-package in-place, which is important for making the model specifications later.
-
-To install requirements from a provided requirements.txt (e.g. installing an
-archived repository with the exact same requirements it was run with), replace
-`pip install -e .` with the following::
-
-  (vivarium_sodium_reduction) :~$ pip install -r requirements.txt
+all necessary requirements with `source evironment.sh`.
 
 Cloning the repository should take a fair bit of time as git must fetch
 the data artifact associated with the demo (several GB of data) from the
@@ -50,16 +30,7 @@ you are likely only retrieving the checksum file that github holds onto,
 and your simulations will fail.** If you are only retrieving checksum
 files you can explicitly pull the data by executing ``git-lfs pull``.
 
-Vivarium uses the Hierarchical Data Format (HDF) as the backing storage
-for the data artifacts that supply data to the simulation. You may not have
-the needed libraries on your system to interact with these files, and this is
-not something that can be specified and installed with the rest of the package's
-dependencies via ``pip``. If you encounter HDF5-related errors, you should
-install hdf tooling from within your environment like so::
-
-  (vivarium_sodium_reduction) :~$ conda install hdf5
-
-The ``(vivarium_sodium_reduction)`` that precedes your shell prompt will probably show
+The ``(vivarium_sodium_reduction_simulation)`` that precedes your shell prompt will probably show
 up by default, though it may not.  It's just a visual reminder that you
 are installing and running things in an isolated programming environment
 so it doesn't conflict with other source code and libraries on your
@@ -123,12 +94,7 @@ step. For more ways to run simulations, see the tutorials at
 https://vivarium.readthedocs.io/en/latest/tutorials/running_a_simulation/index.html
 and https://vivarium.readthedocs.io/en/latest/tutorials/exploration.html
 
-To run multiple simulations in parallel, you can use the `psimulate` command, which you can install with::
+To run multiple simulations in parallel, you can use the `psimulate` command::
 
-   (vivarium_sodium_reduction) :~$ pip install vivarium_cluster_tools
-   (vivarium_sodium_reduction) :~$ conda install redis
-
-Then you can run simulations in parallel on IHME's cluster::
-
-   (vivarium_sodium_reduction) :~$ 
-   psimulate run -o /mnt/share/homes/abie/vivarium_results/sodium_usa/ -P proj_simscience src/vivarium_sodium_reduction/model_specifications/model_spec.yaml src/vivarium_sodium_reduction/model_specifications/branches/scenarios.yaml
+  psimulate run -vvv -m 10 -P proj_simscience src/vivarium_sodium_reduction/model_specifications/model_spec.yaml sr
+c/vivarium_sodium_reduction/model_specifications/branches/scenarios.yaml
