@@ -37,7 +37,7 @@ class RelativeShiftIntervention(Component):
         self.population_view = builder.population.get_view(["age"])
 
         builder.value.register_value_modifier(
-            f'{self.target}.exposure', modifier=self.adjust_exposure, requires_columns=["age"]
+            f"{self.target}.exposure", modifier=self.adjust_exposure, requires_columns=["age"]
         )
 
     def adjust_exposure(self, index: pd.Index, exposure: pd.Series) -> pd.Series:

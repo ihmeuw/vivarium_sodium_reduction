@@ -16,6 +16,7 @@ from vivarium_public_health.risks.data_transformations import (
 )
 from vivarium_public_health.utilities import EntityString
 
+
 class DropValueRisk(Risk):
     def __init__(self, risk: str):
         super().__init__(risk)
@@ -59,6 +60,7 @@ class DropValueRisk(Risk):
 
         return post_processor
 
+
 class SodiumSBPEffect(Component):
     @property
     def name(self):
@@ -83,7 +85,9 @@ class SodiumSBPEffect(Component):
         sodium_exposure_raw = self.sodium_exposure_raw(index)
 
         # FIXME: this should go in the constants.py file
-        mmHg_per_g_sodium = 5.8/6.0  # 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease
+        mmHg_per_g_sodium = (
+            5.8 / 6.0
+        )  # 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease
 
         sodium_drop = sodium_exposure_raw - sodium_exposure
 

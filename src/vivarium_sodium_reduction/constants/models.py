@@ -2,7 +2,6 @@ from vivarium_sodium_reduction.constants import data_keys
 
 
 class TransitionString(str):
-
     def __new__(cls, value):
         # noinspection PyArgumentList
         obj = str.__new__(cls, value.lower())
