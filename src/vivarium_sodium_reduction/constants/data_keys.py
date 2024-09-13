@@ -33,9 +33,13 @@ class __IschemicHeartDisease(NamedTuple):
     # Keys that will be loaded into the artifact. must have a colon type declaration
     PREVALENCE: TargetString = TargetString("cause.ischemic_heart_disease.prevalence")
     INCIDENCE_RATE: TargetString = TargetString("cause.ischemic_heart_disease.incidence_rate")
-    DISABILITY_WEIGHT: TargetString = TargetString("cause.ischemic_heart_disease.disability_weight")
+    DISABILITY_WEIGHT: TargetString = TargetString(
+        "cause.ischemic_heart_disease.disability_weight"
+    )
     EMR: TargetString = TargetString("cause.ischemic_heart_disease.excess_mortality_rate")
-    CSMR: TargetString = TargetString("cause.ischemic_heart_disease.cause_specific_mortality_rate")
+    CSMR: TargetString = TargetString(
+        "cause.ischemic_heart_disease.cause_specific_mortality_rate"
+    )
     RESTRICTIONS: TargetString = TargetString("cause.ischemic_heart_disease.restrictions")
 
     # Useful keys not for the artifact - distinguished by not using the colon type declaration
@@ -101,10 +105,16 @@ STOMACH_CANCER = __StomachCancer()
 class __IntracerebralHemorrhage(NamedTuple):
     # Keys that will be loaded into the artifact. must have a colon type declaration
     PREVALENCE: TargetString = TargetString("cause.intracerebral_hemorrhage.prevalence")
-    INCIDENCE_RATE: TargetString = TargetString("cause.intracerebral_hemorrhage.incidence_rate")
-    DISABILITY_WEIGHT: TargetString = TargetString("cause.intracerebral_hemorrhage.disability_weight")
+    INCIDENCE_RATE: TargetString = TargetString(
+        "cause.intracerebral_hemorrhage.incidence_rate"
+    )
+    DISABILITY_WEIGHT: TargetString = TargetString(
+        "cause.intracerebral_hemorrhage.disability_weight"
+    )
     EMR: TargetString = TargetString("cause.intracerebral_hemorrhage.excess_mortality_rate")
-    CSMR: TargetString = TargetString("cause.intracerebral_hemorrhage.cause_specific_mortality_rate")
+    CSMR: TargetString = TargetString(
+        "cause.intracerebral_hemorrhage.cause_specific_mortality_rate"
+    )
     RESTRICTIONS: TargetString = TargetString("cause.intracerebral_hemorrhage.restrictions")
 
     # Useful keys not for the artifact - distinguished by not using the colon type declaration
@@ -124,10 +134,16 @@ INTRACEREBRAL_HEMORRHAGE = __IntracerebralHemorrhage()
 class __SubarachnoidHemorrhage(NamedTuple):
     # Keys that will be loaded into the artifact. must have a colon type declaration
     PREVALENCE: TargetString = TargetString("cause.subarachnoid_hemorrhage.prevalence")
-    INCIDENCE_RATE: TargetString = TargetString("cause.subarachnoid_hemorrhage.incidence_rate")
-    DISABILITY_WEIGHT: TargetString = TargetString("cause.subarachnoid_hemorrhage.disability_weight")
+    INCIDENCE_RATE: TargetString = TargetString(
+        "cause.subarachnoid_hemorrhage.incidence_rate"
+    )
+    DISABILITY_WEIGHT: TargetString = TargetString(
+        "cause.subarachnoid_hemorrhage.disability_weight"
+    )
     EMR: TargetString = TargetString("cause.subarachnoid_hemorrhage.excess_mortality_rate")
-    CSMR: TargetString = TargetString("cause.subarachnoid_hemorrhage.cause_specific_mortality_rate")
+    CSMR: TargetString = TargetString(
+        "cause.subarachnoid_hemorrhage.cause_specific_mortality_rate"
+    )
     RESTRICTIONS: TargetString = TargetString("cause.subarachnoid_hemorrhage.restrictions")
 
     # Useful keys not for the artifact - distinguished by not using the colon type declaration
@@ -178,12 +194,8 @@ SBP = __HighSBP()
 
 
 class __HighSodium(NamedTuple):
-    DISTRIBUTION: TargetString = TargetString(
-        "risk_factor.diet_high_in_sodium.distribution"
-    )
-    EXPOSURE_MEAN: TargetString = TargetString(
-        "risk_factor.diet_high_in_sodium.exposure"
-    )
+    DISTRIBUTION: TargetString = TargetString("risk_factor.diet_high_in_sodium.distribution")
+    EXPOSURE_MEAN: TargetString = TargetString("risk_factor.diet_high_in_sodium.exposure")
     EXPOSURE_SD: TargetString = TargetString(
         "risk_factor.diet_high_in_sodium.exposure_standard_deviation"
     )
