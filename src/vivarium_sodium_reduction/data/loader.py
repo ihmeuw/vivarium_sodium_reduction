@@ -53,14 +53,57 @@ def get_data(
         data_keys.POPULATION.DEMOGRAPHY: load_demographic_dimensions,
         data_keys.POPULATION.TMRLE: load_theoretical_minimum_risk_life_expectancy,
         data_keys.POPULATION.ACMR: load_standard_data,
-        # TODO - add appropriate mappings
-        # data_keys.DIARRHEA.PREVALENCE: load_standard_data,
-        # data_keys.DIARRHEA.INCIDENCE_RATE: load_standard_data,
-        # data_keys.DIARRHEA.REMISSION_RATE: load_standard_data,
-        # data_keys.DIARRHEA.CSMR: load_standard_data,
-        # data_keys.DIARRHEA.EMR: load_standard_data,
-        # data_keys.DIARRHEA.DISABILITY_WEIGHT: load_standard_data,
-        # data_keys.DIARRHEA.RESTRICTIONS: load_metadata,
+        # cause (ischemic heart disease)
+        data_keys.IHD.PREVALENCE: load_standard_data,
+        data_keys.IHD.INCIDENCE_RATE: load_standard_data,
+        data_keys.IHD.DISABILITY_WEIGHT: load_standard_data,
+        data_keys.IHD.EMR: load_standard_data,
+        data_keys.IHD.CSMR: load_standard_data,
+        data_keys.IHD.RESTRICTIONS: load_metadata,
+        # cause (ischemic stroke)
+        data_keys.ISCHEMIC_STROKE.PREVALENCE: load_standard_data,
+        data_keys.ISCHEMIC_STROKE.INCIDENCE_RATE: load_standard_data,
+        data_keys.ISCHEMIC_STROKE.DISABILITY_WEIGHT: load_standard_data,
+        data_keys.ISCHEMIC_STROKE.EMR: load_standard_data,
+        data_keys.ISCHEMIC_STROKE.CSMR: load_standard_data,
+        data_keys.ISCHEMIC_STROKE.RESTRICTIONS: load_metadata,
+        # cause (stomach cancer)
+        data_keys.STOMACH_CANCER.PREVALENCE: load_standard_data,
+        data_keys.STOMACH_CANCER.INCIDENCE_RATE: load_standard_data,
+        data_keys.STOMACH_CANCER.DISABILITY_WEIGHT: load_standard_data,
+        data_keys.STOMACH_CANCER.EMR: load_standard_data,
+        data_keys.STOMACH_CANCER.CSMR: load_standard_data,
+        data_keys.STOMACH_CANCER.RESTRICTIONS: load_metadata,
+        # cause (intracerebral hemorrhage)
+        data_keys.INTRACEREBRAL_HEMORRHAGE.PREVALENCE: load_standard_data,
+        data_keys.INTRACEREBRAL_HEMORRHAGE.INCIDENCE_RATE: load_standard_data,
+        data_keys.INTRACEREBRAL_HEMORRHAGE.DISABILITY_WEIGHT: load_standard_data,
+        data_keys.INTRACEREBRAL_HEMORRHAGE.EMR: load_standard_data,
+        data_keys.INTRACEREBRAL_HEMORRHAGE.CSMR: load_standard_data,
+        data_keys.INTRACEREBRAL_HEMORRHAGE.RESTRICTIONS: load_metadata,
+        # cause (subarachnoid hemorrhage)
+        data_keys.SUBARACHNOID_HEMORRHAGE.PREVALENCE: load_standard_data,
+        data_keys.SUBARACHNOID_HEMORRHAGE.INCIDENCE_RATE: load_standard_data,
+        data_keys.SUBARACHNOID_HEMORRHAGE.DISABILITY_WEIGHT: load_standard_data,
+        data_keys.SUBARACHNOID_HEMORRHAGE.EMR: load_standard_data,
+        data_keys.SUBARACHNOID_HEMORRHAGE.CSMR: load_standard_data,
+        data_keys.SUBARACHNOID_HEMORRHAGE.RESTRICTIONS: load_metadata,
+        # risk (high systolic blood pressure)
+        data_keys.SBP.DISTRIBUTION: load_metadata,
+        data_keys.SBP.EXPOSURE_MEAN: load_standard_data,
+        data_keys.SBP.EXPOSURE_SD: load_standard_data,
+        data_keys.SBP.EXPOSURE_WEIGHTS: load_standard_data,
+        data_keys.SBP.RELATIVE_RISK: load_standard_data,
+        data_keys.SBP.PAF: load_standard_data,
+        data_keys.SBP.TMRED: load_metadata,
+        # risk (diet high in sodium)
+        data_keys.SODIUM.DISTRIBUTION: load_metadata,
+        data_keys.SODIUM.EXPOSURE_MEAN: load_standard_data,
+        data_keys.SODIUM.EXPOSURE_SD: load_standard_data,
+        data_keys.SODIUM.EXPOSURE_WEIGHTS: load_standard_data,
+        data_keys.SODIUM.RELATIVE_RISK: load_standard_data,
+        data_keys.SODIUM.PAF: load_standard_data,
+        data_keys.SODIUM.TMRED: load_metadata,
     }
     return mapping[lookup_key](lookup_key, location, years)
 
@@ -106,7 +149,7 @@ def load_standard_data(
     return interface.get_measure(entity, key.measure, location, years).droplevel("location")
 
 
-def load_metadata(key: str, location: str):
+def load_metadata(key: str, location: str, years):
     key = EntityKey(key)
     entity = get_entity(key)
     entity_metadata = entity[key.measure]
