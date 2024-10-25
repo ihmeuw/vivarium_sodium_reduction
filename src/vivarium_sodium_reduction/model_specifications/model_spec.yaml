@@ -32,15 +32,15 @@ components:
                                      'cause.stomach_cancer.incidence_rate')
     vivarium_sodium_reduction.components:
         risks:
-            - DropValueRisk('risk_factor.high_systolic_blood_pressure')
             - DropValueRisk('risk_factor.diet_high_in_sodium')
+            - DropValueRisk('risk_factor.high_systolic_blood_pressure')
             - SodiumSBPEffect()
         interventions:
             - RelativeShiftIntervention('diet_high_in_sodium')
 
 configuration:
     input_data:
-        artifact_path: /mnt/share/homes/abie/projects/2024/sodium_usa.hdf
+        artifact_path: /mnt/team/simulation_science/pub/models/FOR_ABIE_REVIEW/sodium_usa_with_dws_no_loc.hdf #/mnt/share/homes/abie/projects/2024/sodium_usa.hdf
         input_draw_number: 258
     interpolation:
         order: 0
@@ -58,9 +58,9 @@ configuration:
             year: 2044
             month: 12
             day: 31
-        step_size: 168 # 28*6 (approximately 6 months, in days)
+        step_size: 69.875 # 365.25/6 # divide the year into 6 time steps, make observers look a little nicer
     population:
-        population_size: 10_000
+        population_size: 100_000
         initialization_age_min: 0
         initialization_age_max: 100
     

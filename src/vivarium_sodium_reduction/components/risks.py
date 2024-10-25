@@ -89,6 +89,7 @@ class SodiumSBPEffect(Component):
             5.8 / 6.0
         )  # 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease
 
+        # TODO: mmHg_per_g_sodium should be different for high and low blood pressure (not sure if that is exposure or exposure_raw)
         sodium_drop = sodium_exposure_raw - sodium_exposure
 
         sbp_drop_due_to_sodium_drop = sodium_drop * mmHg_per_g_sodium

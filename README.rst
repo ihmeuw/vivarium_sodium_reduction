@@ -1,8 +1,8 @@
-===============================
-vivarium_sodium_reduction
-===============================
+=========================================================================
+Vivarium Simulation of Sodium Reduction through Front-of-package Labeling
+=========================================================================
 
-Research repository for the vivarium_sodium_reduction project.
+Vivarium model repository for the vivarium_sodium_reduction project.
 
 .. contents::
    :depth: 1

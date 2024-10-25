@@ -1,6 +1,6 @@
-input_draw_count: 1
+input_draw_count: 100
 random_seed_count: 1
 
 branches:
     - relative_shift_intervention_on_diet_high_in_sodium:
-        shift_factor: [1.0, 0.95, 0.90, 0.85]
+        shift_factor: [1.0, 0.85, 0.70]
