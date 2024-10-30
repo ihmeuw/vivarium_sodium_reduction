@@ -27,14 +27,16 @@ class RelativeShiftIntervention(Component):
     def configuration_defaults(self) -> Dict[str, Dict[str, Any]]:
         return {f"{self.name}": self.CONFIGURATION_DEFAULTS}
 
+    @property
+    def columns_required(self):
+        return ["age"]
+
     def setup(self, builder: Builder) -> None:
         self.config = builder.configuration[self.name]
         self.shift_factor = self.config.shift_factor
 
         self.age_start = self.config.age_start
         self.age_end = self.config.age_end
-
-        self.population_view = builder.population.get_view(["age"])
 
         builder.value.register_value_modifier(
             f"{self.target}.exposure", modifier=self.adjust_exposure, requires_columns=["age"]
