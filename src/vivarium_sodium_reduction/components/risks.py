@@ -69,6 +69,7 @@ class SodiumSBPEffect(Component):
     def setup(self, builder: Builder):
         self.sodium_exposure = builder.value.get_value("diet_high_in_sodium.exposure")
         self.sodium_exposure_raw = builder.value.get_value("diet_high_in_sodium.raw_exposure")
+        self.sbp_exposure_raw = builder.value.get_value("high_systolic_blood_pressure.raw_exposure")
 
         builder.value.register_value_modifier(
             "high_systolic_blood_pressure.drop_value",
@@ -83,15 +84,23 @@ class SodiumSBPEffect(Component):
     def sodium_effect_on_sbp_drop(self, index, sbp_drop_value):
         sodium_exposure = self.sodium_exposure(index)
         sodium_exposure_raw = self.sodium_exposure_raw(index)
+        sbp_exposure_raw = self.sbp_exposure_raw(index)
 
         # FIXME: this should go in the constants.py file
-        mmHg_per_g_sodium = (
-            5.8 / 6.0
-        )  # 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease
+        mmHg_per_g_sodium_for_low_sbp = (
+            1.0 # (.5, 1.49) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
+        )
+        
 
-        # TODO: mmHg_per_g_sodium should be different for high and low blood pressure (not sure if that is exposure or exposure_raw)
+        mmHg_per_g_sodium_for_high_sbp = (
+            3.01 # (1,99, 4.02) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
+        )  # 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease (doi: 10.1002/14651858.CD004937.pub2 ?)
+
+        # TODO: confirm mmHg_per_g_sodium difference is based on current exposure, not untreated exposure
+        mmHg_per_g_sodium = np.where(sbp_exposure_raw <= 140,
+                                     mmHg_per_g_sodium_for_low_sbp, mmHg_per_g_sodium_for_high_sbp)
+                                     
         sodium_drop = sodium_exposure_raw - sodium_exposure
-
         sbp_drop_due_to_sodium_drop = sodium_drop * mmHg_per_g_sodium
-
+        
         return sbp_drop_value + sbp_drop_due_to_sodium_drop
