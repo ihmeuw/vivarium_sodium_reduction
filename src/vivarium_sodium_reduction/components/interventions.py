@@ -30,7 +30,7 @@ class RelativeShiftIntervention(Component):
     @property
     def columns_required(self):
         return ["age"]
-    
+
     def setup(self, builder: Builder) -> None:
         self.config = builder.configuration[self.name]
         self.shift_factor = self.config.shift_factor
