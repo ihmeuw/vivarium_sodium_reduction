@@ -65,7 +65,7 @@ configuration:
         initialization_age_max: 100
     
     relative_shift_intervention_on_diet_high_in_sodium:
-        shift_factor: 2.0
+        shift_factor: 0.85
         age_start: 0
         age_end: 125
 
