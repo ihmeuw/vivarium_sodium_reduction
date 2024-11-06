@@ -1,34 +1,19 @@
-from datetime import datetime
-
-############################
-# Disease Model Parameters #
-############################
-
-REMISSION_RATE = 0.1
-MEAN_SOJOURN_TIME = 10
-
+from typing import Dict, NamedTuple, Tuple
+from scipy import stats
 
 ##############################
-# Screening Model Parameters #
+# SodiumSBPEffect Parameters #
 ##############################
 
-PROBABILITY_ATTENDING_SCREENING_KEY = "probability_attending_screening"
-PROBABILITY_ATTENDING_SCREENING_START_MEAN = 0.25
-PROBABILITY_ATTENDING_SCREENING_START_STDDEV = 0.0025
-PROBABILITY_ATTENDING_SCREENING_END_MEAN = 0.5
-PROBABILITY_ATTENDING_SCREENING_END_STDDEV = 0.005
+class __SodiumSBPEffect(NamedTuple):
+    MMHG_PER_G_SODIUM_FOR_LOW_SBP: Tuple[str, stats.norm] = (
+        "mmHg_per_g_sodium_for_low_sbp",
+        stats.norm(loc=1.0, scale=(1.49 - 0.50)/(2*1.96)),  # UI (.5, 1.49) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
+    )
+    MMHG_PER_G_SODIUM_FOR_HIGH_SBP: Tuple[str, stats.norm] = (
+        "mmHg_per_g_sodium_for_high_sbp",
+        stats.norm(loc=3.01, scale=(4.02 - 1.99)/(2*1.96)),  # UI (1.99, 4.02) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
+    )
 
-FIRST_SCREENING_AGE = 21
-MID_SCREENING_AGE = 30
-LAST_SCREENING_AGE = 65
 
-
-###################################
-# Scale-up Intervention Constants #
-###################################
-SCALE_UP_START_DT = datetime(2021, 1, 1)
-SCALE_UP_END_DT = datetime(2030, 1, 1)
-SCREENING_SCALE_UP_GOAL_COVERAGE = 0.50
-SCREENING_SCALE_UP_DIFFERENCE = (
-    SCREENING_SCALE_UP_GOAL_COVERAGE - PROBABILITY_ATTENDING_SCREENING_START_MEAN
-)
+SodiumSBPEffect = __SodiumSBPEffect()

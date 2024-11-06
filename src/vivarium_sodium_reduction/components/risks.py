@@ -16,6 +16,9 @@ from vivarium_public_health.risks.data_transformations import (
 )
 from vivarium_public_health.utilities import EntityString
 
+from ..constants import data_values
+from ..utilities import get_random_variable
+
 
 class DropValueRisk(Risk):
     def __init__(self, risk: str):
@@ -75,12 +78,14 @@ class SodiumSBPEffect(Component):
 
         # FIXME: include uncertainty, refactor numbers into the constants.py file
         # previously used 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease for both (doi: 10.1002/14651858.CD004937.pub2 ?)
-        self.mmHg_per_g_sodium_for_low_sbp = (
-            1.0  # (.5, 1.49) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
+        self.mmHg_per_g_sodium_for_low_sbp = get_random_variable(
+            builder.configuration.input_data.input_draw_number,
+            data_values.SodiumSBPEffect.MMHG_PER_G_SODIUM_FOR_LOW_SBP,
         )
 
-        self.mmHg_per_g_sodium_for_high_sbp = (
-            3.01  # (1.99, 4.02) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
+        self.mmHg_per_g_sodium_for_high_sbp = get_random_variable(
+            builder.configuration.input_data.input_draw_number,
+            data_values.SodiumSBPEffect.MMHG_PER_G_SODIUM_FOR_HIGH_SBP,
         )
 
         builder.value.register_value_modifier(
