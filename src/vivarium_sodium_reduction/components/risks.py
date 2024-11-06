@@ -76,8 +76,6 @@ class SodiumSBPEffect(Component):
             "high_systolic_blood_pressure.raw_exposure"
         )
 
-        # FIXME: include uncertainty, refactor numbers into the constants.py file
-        # previously used 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease for both (doi: 10.1002/14651858.CD004937.pub2 ?)
         self.mmHg_per_g_sodium_for_low_sbp = get_random_variable(
             builder.configuration.input_data.input_draw_number,
             data_values.SodiumSBPEffect.MMHG_PER_G_SODIUM_FOR_LOW_SBP,
@@ -99,7 +97,7 @@ class SodiumSBPEffect(Component):
         )
 
     def sodium_effect_on_sbp_drop(self, index, sbp_drop_value):
-        # calculate the drop in sodium intake (which is implemented in 
+        # calculate the drop in sodium intake (which is implemented in
         # the component.intervention.RelativeShiftIntervention class)
         sodium_exposure_raw = self.sodium_exposure_raw(index)
         sodium_exposure = self.sodium_exposure(index)
