@@ -73,6 +73,16 @@ class SodiumSBPEffect(Component):
             "high_systolic_blood_pressure.raw_exposure"
         )
 
+        # FIXME: include uncertainty, refactor numbers into the constants.py file
+        # previously used 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease for both (doi: 10.1002/14651858.CD004937.pub2 ?)
+        self.mmHg_per_g_sodium_for_low_sbp = (
+            1.0  # (.5, 1.49) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
+        )
+
+        self.mmHg_per_g_sodium_for_high_sbp = (
+            3.01  # (1.99, 4.02) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
+        )
+
         builder.value.register_value_modifier(
             "high_systolic_blood_pressure.drop_value",
             modifier=self.sodium_effect_on_sbp_drop,
@@ -84,28 +94,22 @@ class SodiumSBPEffect(Component):
         )
 
     def sodium_effect_on_sbp_drop(self, index, sbp_drop_value):
-        sodium_exposure = self.sodium_exposure(index)
+        # calculate the drop in sodium intake (which is implemented in 
+        # the component.intervention.RelativeShiftIntervention class)
         sodium_exposure_raw = self.sodium_exposure_raw(index)
+        sodium_exposure = self.sodium_exposure(index)
+        sodium_drop = sodium_exposure_raw - sodium_exposure
+
+        # calculate the rate of SBP reduction per gram of sodium reduction
+        # which is different for people with low and high SBP
         sbp_exposure_raw = self.sbp_exposure_raw(index)
-
-        # FIXME: this should go in the constants.py file
-        # previously used 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease for both (doi: 10.1002/14651858.CD004937.pub2 ?)
-        mmHg_per_g_sodium_for_low_sbp = (
-            1.0  # (.5, 1.49) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
-        )
-
-        mmHg_per_g_sodium_for_high_sbp = (
-            3.01  # (1.99, 4.02) mmHg from https://doi.org/10.1161/CIRCULATIONAHA.120.050371
-        )
-
-        # TODO: confirm mmHg_per_g_sodium difference is based on current exposure, not untreated exposure
         mmHg_per_g_sodium = np.where(
             sbp_exposure_raw <= 140,
-            mmHg_per_g_sodium_for_low_sbp,
-            mmHg_per_g_sodium_for_high_sbp,
+            self.mmHg_per_g_sodium_for_low_sbp,
+            self.mmHg_per_g_sodium_for_high_sbp,
         )
 
-        sodium_drop = sodium_exposure_raw - sodium_exposure
+        # combine these two to get the drop in SBP due to sodium reduction
+        #  for each individual
         sbp_drop_due_to_sodium_drop = sodium_drop * mmHg_per_g_sodium
-
         return sbp_drop_value + sbp_drop_due_to_sodium_drop
