@@ -16,6 +16,9 @@ from vivarium_public_health.risks.data_transformations import (
 )
 from vivarium_public_health.utilities import EntityString
 
+from ..constants import data_values
+from ..utilities import get_random_variable
+
 
 class DropValueRisk(Risk):
     def __init__(self, risk: str):
@@ -69,6 +72,19 @@ class SodiumSBPEffect(Component):
     def setup(self, builder: Builder):
         self.sodium_exposure = builder.value.get_value("diet_high_in_sodium.exposure")
         self.sodium_exposure_raw = builder.value.get_value("diet_high_in_sodium.raw_exposure")
+        self.sbp_exposure_raw = builder.value.get_value(
+            "high_systolic_blood_pressure.raw_exposure"
+        )
+
+        self.mmHg_per_g_sodium_for_low_sbp = get_random_variable(
+            builder.configuration.input_data.input_draw_number,
+            data_values.SodiumSBPEffect.MMHG_PER_G_SODIUM_FOR_LOW_SBP,
+        )
+
+        self.mmHg_per_g_sodium_for_high_sbp = get_random_variable(
+            builder.configuration.input_data.input_draw_number,
+            data_values.SodiumSBPEffect.MMHG_PER_G_SODIUM_FOR_HIGH_SBP,
+        )
 
         builder.value.register_value_modifier(
             "high_systolic_blood_pressure.drop_value",
@@ -81,17 +97,22 @@ class SodiumSBPEffect(Component):
         )
 
     def sodium_effect_on_sbp_drop(self, index, sbp_drop_value):
-        sodium_exposure = self.sodium_exposure(index)
+        # calculate the drop in sodium intake (which is implemented in
+        # the component.intervention.RelativeShiftIntervention class)
         sodium_exposure_raw = self.sodium_exposure_raw(index)
-
-        # FIXME: this should go in the constants.py file
-        mmHg_per_g_sodium = (
-            5.8 / 6.0
-        )  # 5.8 (2.5, 9.2) mmHg decrease per 6g/day sodium decrease
-
-        # TODO: mmHg_per_g_sodium should be different for high and low blood pressure (not sure if that is exposure or exposure_raw)
+        sodium_exposure = self.sodium_exposure(index)
         sodium_drop = sodium_exposure_raw - sodium_exposure
 
-        sbp_drop_due_to_sodium_drop = sodium_drop * mmHg_per_g_sodium
+        # calculate the rate of SBP reduction per gram of sodium reduction
+        # which is different for people with low and high SBP
+        sbp_exposure_raw = self.sbp_exposure_raw(index)
+        mmHg_per_g_sodium = np.where(
+            sbp_exposure_raw <= 140,
+            self.mmHg_per_g_sodium_for_low_sbp,
+            self.mmHg_per_g_sodium_for_high_sbp,
+        )
 
+        # combine these two to get the drop in SBP due to sodium reduction
+        #  for each individual
+        sbp_drop_due_to_sodium_drop = sodium_drop * mmHg_per_g_sodium
         return sbp_drop_value + sbp_drop_due_to_sodium_drop
