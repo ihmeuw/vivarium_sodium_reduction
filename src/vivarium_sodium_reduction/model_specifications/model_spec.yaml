@@ -63,11 +63,12 @@ configuration:
         population_size: 100_000
         initialization_age_min: 0
         initialization_age_max: 100
+        untracking_age: 124
     
     relative_shift_intervention_on_diet_high_in_sodium:
         shift_factor: 0.85
         age_start: 0
-        age_end: 125
+        age_end: 124
 
     stratification:
         default:
