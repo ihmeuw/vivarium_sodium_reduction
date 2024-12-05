@@ -236,6 +236,7 @@ def build_single_location_artifact(
             logger.info(f"   - Loading and writing {key} data")
             builder.load_and_write_data(artifact, key, location, years, key in replace_keys)
 
+    builder.generate_consistent_rates('stomach_cancer', artifact, location, years)
     logger.info(f"**Done building -- {location}**")
 
 
