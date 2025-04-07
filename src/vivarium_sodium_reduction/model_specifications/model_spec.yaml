@@ -9,7 +9,7 @@ components:
             - SI('ischemic_stroke')
             - SI('intracerebral_hemorrhage')
             - SI('subarachnoid_hemorrhage')
-            - SI('stomach_cancer')
+            - SIR('stomach_cancer_consistent')
         results:
             - ResultsStratifier()
             - DisabilityObserver()
@@ -17,7 +17,7 @@ components:
             - DiseaseObserver('ischemic_stroke')
             - DiseaseObserver('intracerebral_hemorrhage')
             - DiseaseObserver('subarachnoid_hemorrhage')
-            - DiseaseObserver('stomach_cancer')
+            - DiseaseObserver('stomach_cancer_consistent')
             - MortalityObserver()
         risks:
             - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
@@ -29,7 +29,7 @@ components:
             - NonLogLinearRiskEffect('risk_factor.high_systolic_blood_pressure',
                                      'cause.subarachnoid_hemorrhage.incidence_rate')
             - NonLogLinearRiskEffect('risk_factor.diet_high_in_sodium',
-                                     'cause.stomach_cancer.incidence_rate')
+                                     'cause.stomach_cancer_consistent.incidence_rate')
     vivarium_sodium_reduction.components:
         risks:
             - DropValueRisk('risk_factor.diet_high_in_sodium')
@@ -40,7 +40,8 @@ components:
 
 configuration:
     input_data:
-        artifact_path: /mnt/team/simulation_science/pub/models/FOR_ABIE_REVIEW/sodium_usa_with_dws_no_loc.hdf #/mnt/share/homes/abie/projects/2024/sodium_usa.hdf
+        # artifact_path: /mnt/team/simulation_science/pub/models/FOR_ABIE_REVIEW/sodium_usa_with_dws_no_loc.hdf
+        artifact_path: /mnt/team/simulation_science/pub/training/abie/artifacts/united_states_of_america.hdf
         input_draw_number: 258
     interpolation:
         order: 0
@@ -49,6 +50,7 @@ configuration:
         map_size: 1_000_000
         key_columns: ['entrance_time', 'age']
         random_seed: 4344
+        additional_seed: 258
     time:
         start:
             year: 2025
